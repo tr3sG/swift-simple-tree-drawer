@@ -8,12 +8,11 @@
 import UIKit
 
 class ViewController: UIViewController {
-    
-    @IBOutlet weak var scrollView: UIScrollView!
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         
         let root = NodeView.initFromXib(withName: "1");
         let node2 = NodeView.initFromXib(withName: "2");
@@ -42,7 +41,6 @@ class ViewController: UIViewController {
         let node12 = NodeView.initFromXib(withName: "12");
         let node13 = NodeView.initFromXib(withName: "13");
         node7.insertChildren([node12, node13]);
-        print("Root needed size \(root.neededSize())");
         
         let node14 = NodeView.initFromXib(withName: "14");
         let node15 = NodeView.initFromXib(withName: "15");
@@ -51,7 +49,6 @@ class ViewController: UIViewController {
         node11.insertChildren([node14, node15, node16, node17]);
         
         self.drawNode(root, at: CGPointMake(0, 20));
-        self.scrollView.hidden = true;
     }
 
     override func didReceiveMemoryWarning() {
