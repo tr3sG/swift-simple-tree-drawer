@@ -47,8 +47,13 @@ class ViewController: UIViewController {
         let node16 = NodeView.initFromXib(withName: "16");
         let node17 = NodeView.initFromXib(withName: "17");
         node11.insertChildren([node14, node15, node16, node17]);
+        print(node11.neededSize());
         
-        self.drawNode(root, at: CGPointMake(0, 20));
+//        self.drawNode(root, at: CGPointMake(0, 20));
+        root.frame.size = root.neededSize();
+        self.view.addSubview(root);
+        root.drawChildrenNodes();
+        root.frame.origin.y = 50;
     }
 
     override func didReceiveMemoryWarning() {
