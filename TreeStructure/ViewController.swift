@@ -20,23 +20,29 @@ class ViewController: UIViewController {
         let node3 = NodeView.initFromXib(withName: "3");
         let node4 = NodeView.initFromXib(withName: "4");
         root.insertChildren([node2, node3, node4]);
+        print("Root needed size \(root.neededSize())");
         
         let node5 = NodeView.initFromXib(withName: "5");
         let node6 = NodeView.initFromXib(withName: "6");
         let node7 = NodeView.initFromXib(withName: "7");
         let node8 = NodeView.initFromXib(withName: "8");
         node2.insertChildren([node5, node6, node7, node8]);
+        print(node2.neededSize());
+        print("Root needed size \(root.neededSize())");
         
         let node9 = NodeView.initFromXib(withName: "9");
         let node10 = NodeView.initFromXib(withName: "10");
         node3.insertChildren([node9, node10]);
+        print("Root needed size \(root.neededSize())");
         
         let node11 = NodeView.initFromXib(withName: "11");
         node5.insertChild(node11);
+        print("Root needed size \(root.neededSize())");
         
         let node12 = NodeView.initFromXib(withName: "12");
         let node13 = NodeView.initFromXib(withName: "13");
         node7.insertChildren([node12, node13]);
+        print("Root needed size \(root.neededSize())");
         
         let node14 = NodeView.initFromXib(withName: "14");
         let node15 = NodeView.initFromXib(withName: "15");
@@ -44,7 +50,6 @@ class ViewController: UIViewController {
         let node17 = NodeView.initFromXib(withName: "17");
         node11.insertChildren([node14, node15, node16, node17]);
         
-        print(root.neededSize());
         self.drawNode(root, at: CGPointMake(0, 20));
         self.scrollView.hidden = true;
     }

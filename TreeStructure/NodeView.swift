@@ -95,12 +95,12 @@ class NodeView: UIView {
     }
     
     func neededSize() -> CGSize {
+        var size = NodeView.nodeSize;
+        
         if (self.children.count == 0) {
-            return NodeView.nodeSize;
+            return size;
         }
         
-        var size = NodeView.nodeSize +^ NodeView.separatorSize +^ NodeView.nodeSize;
-        size.width = 0;
         for child in self.children {
             size +>= child.neededSize();
             if (self.children.last != child) {
@@ -108,12 +108,25 @@ class NodeView: UIView {
             }
         }
         
-        return size;
+        return size +^ NodeView.separatorSize +^ NodeView.nodeSize;
     }
     
     
     func insertConnector(connector: UIImageView) {
         self.connectors.append(connector);
+    }
+    
+    func numberOfLevels() -> UInt {
+        var levels: UInt = 1;
+        if self.children.count == 0 {
+            return levels;
+        }
+        
+        for child in self.children {
+            levels = max(levels, child.numberOfLevels());
+        }
+        
+        return levels+1;
     }
     
 }
