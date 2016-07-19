@@ -52,7 +52,7 @@
                 <outlet property="childrenView" destination="Uwi-wZ-Vox" id="LMU-bW-Tz4"/>
                 <outlet property="connectorsView" destination="kWb-vS-JGe" id="EVr-Vg-OPW"/>
                 <outlet property="lbName" destination="5Oa-7Q-arA" id="MlD-Oo-Jne"/>
-                <outlet property="node" destination="wOr-K9-RjV" id="J6O-RU-elw"/>
+                <outlet property="vertexView" destination="wOr-K9-RjV" id="smi-6K-b5a"/>
             </connections>
             <point key="canvasLocation" x="365" y="125"/>
         </view>
