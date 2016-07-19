@@ -15,6 +15,7 @@
 		56648B2E1D366C0E009EEA58 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56648B2D1D366C0E009EEA58 /* Assets.xcassets */; };
 		56648B311D366C0E009EEA58 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 56648B2F1D366C0E009EEA58 /* LaunchScreen.storyboard */; };
 		56648B391D366CDD009EEA58 /* NodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56648B381D366CDD009EEA58 /* NodeView.swift */; };
+		566C88581D3E4AB500A83A17 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 566C88571D3E4AB500A83A17 /* Node.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		56648B301D366C0E009EEA58 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		56648B321D366C0E009EEA58 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		56648B381D366CDD009EEA58 /* NodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeView.swift; sourceTree = "<group>"; };
+		566C88571D3E4AB500A83A17 /* Node.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +67,7 @@
 				56648B381D366CDD009EEA58 /* NodeView.swift */,
 				564C5B5E1D3795F10034714B /* CGSizeOperations.swift */,
 				562AFF8F1D367C5A004EBB18 /* NodeView.xib */,
+				566C88571D3E4AB500A83A17 /* Node.swift */,
 				56648B2A1D366C0E009EEA58 /* Main.storyboard */,
 				56648B2D1D366C0E009EEA58 /* Assets.xcassets */,
 				56648B2F1D366C0E009EEA58 /* LaunchScreen.storyboard */,
@@ -146,6 +149,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				56648B391D366CDD009EEA58 /* NodeView.swift in Sources */,
+				566C88581D3E4AB500A83A17 /* Node.swift in Sources */,
 				564C5B5F1D3795F10034714B /* CGSizeOperations.swift in Sources */,
 				56648B291D366C0E009EEA58 /* ViewController.swift in Sources */,
 				56648B271D366C0E009EEA58 /* AppDelegate.swift in Sources */,

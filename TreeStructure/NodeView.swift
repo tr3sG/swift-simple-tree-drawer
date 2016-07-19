@@ -19,116 +19,126 @@ class NodeView: UIView {
             }
             return "";
         }
-        set(newValue) {
+        set {
             self.lbName.text = newValue;
         }
     }
-    weak var parent: NodeView?;
-    var children: Array<NodeView> = [];
-    var connectors: Array<UIImageView> = [];
+    
+    var node: Node?;
+    
     
     @IBOutlet weak var lbName: UILabel!;
+    @IBOutlet weak var connectorsView: UIView!
+    @IBOutlet weak var childrenView: UIView!
+    @IBOutlet weak var vertexView: UIView!
     
-    
-    override var hidden: Bool {
-        get {
-            return super.hidden;
-        }
-        set(hide) {
-            super.hidden = hide;
-            for child in self.children {
-                child.hidden = hide;
-            }
-            
-            for connector in self.connectors {
-                connector.hidden = hide;
-            }
-        }
-    }
     
     
     // MARK: Lifecycle methods
     
-    class func initFromXib(withName name: String = "") -> NodeView {
-        let node = NSBundle.mainBundle().loadNibNamed(String(NodeView), owner: self, options: nil)[0] as! NodeView
-        node.name = name;
+    class func initFromXib(with node: Node) -> NodeView {
+        let nodeView = NSBundle.mainBundle().loadNibNamed(String(NodeView), owner: self, options: nil)[0] as! NodeView
+        nodeView.node = node;
+        nodeView.name = node.name;
+        nodeView.frame.size = node.neededSize();
         
-        return node;
+        return nodeView;
     }
     
     // MARK: Actions
     
     @IBAction func onVisibilityTap(sender: UIButton) {
-        for child in self.children {
-            child.hidden = !child.hidden;
-        }
+        self.childrenView.hidden = !self.childrenView.hidden;
+        self.connectorsView.hidden = !self.connectorsView.hidden;
+    }
+    
+    
+    // MARK: Public
+    
+    func drawChildrenNodes() {
+        self.clearChildrenView();
         
-        for connector in self.connectors {
-            connector.hidden = !connector.hidden;
-        }
-    }
-    
-    
-    // MARK: Public methods
-    
-    func insertChild(child: NodeView) {
-        child.parent = self;
-        self.children.append(child);
-    }
-    
-    func insertChildren(children: Array<NodeView>) {
-        for child in children {
-            self.insertChild(child);
-        }
-    }
-    
-    func removeChild(child: NodeView) {
-        guard let index = self.children.indexOf(child) else {
+        guard let node = self.node else {
             return;
         }
-        self.children.removeAtIndex(index);
         
-        // Remove connector if exists
-        if self.connectors.indices.contains(index)  {
-            self.connectors.removeAtIndex(index);
+        let size = node.neededSize();
+        
+        self.frame.size = size;
+        self.childrenView.frame.size = size;
+        self.connectorsView.frame.size = size;
+        
+        var origin = CGPointMake(0, NodeView.nodeSize.height + NodeView.separatorSize.height);
+        
+        for child in node.children {
+            let childView = NodeView.initFromXib(with: child);
+            self.childrenView.addSubview(childView);
+            childView.drawChildrenNodes();
+            childView.frame.origin = origin;
+            origin.x += childView.frame.width + NodeView.separatorSize.width;
+        }
+        
+        self.vertexView.frame.origin.x = (size.width - NodeView.nodeSize.width) / 2;
+        
+        self.drawConnectors();
+    }
+    
+    
+    // MARK: Private
+    
+    private func clearChildrenView() {
+        for view in self.childrenView.subviews {
+            view.removeFromSuperview();
+        }
+        
+        for connector in self.connectorsView.subviews {
+            connector.removeFromSuperview();
         }
     }
     
-    func neededSize() -> CGSize {
-        var size = NodeView.nodeSize;
-        
-        if (self.children.count == 0) {
-            return size;
+    private func drawConnectors() {
+        guard let node = self.node where node.numberOfChildren() > 0 else {
+            return;
         }
         
-        for child in self.children {
-            size +>= child.neededSize();
-            if (self.children.last != child) {
-                size +>= NodeView.separatorSize;
+        UIGraphicsBeginImageContext(self.frame.size);
+        guard let context = UIGraphicsGetCurrentContext() else {
+            return;
+        }
+        
+        CGContextSetLineWidth(context, 1);
+        CGContextSetStrokeColorWithColor(context, UIColor.blackColor().CGColor);
+        let firstChildView = self.childrenView.subviews.first!;
+        
+        if (node.children.count == 1) {
+            CGContextMoveToPoint(context, firstChildView.center.x, self.vertexView.center.y);
+            CGContextAddLineToPoint(context, firstChildView.center.x, firstChildView.frame.origin.y);
+            CGContextStrokePath(context);
+        }
+        else if (node.children.count > 1) {
+            let linePosY = NodeView.nodeSize.height/2 + NodeView.separatorSize.height;
+            let lastChildView = self.childrenView.subviews.last!;
+            CGContextMoveToPoint(context, firstChildView.center.x, linePosY);
+            CGContextAddLineToPoint(context, lastChildView.center.x, linePosY);
+            CGContextStrokePath(context);
+            
+            for childView in self.childrenView.subviews {
+                self.drawLine(fromNode: childView, toLineAt: linePosY, in: context);
             }
+            
+            self.drawLine(fromNode: self.vertexView, toLineAt: linePosY, in: context);
         }
         
-        return size +^ NodeView.separatorSize +^ NodeView.nodeSize;
+        let img = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        self.connectorsView.addSubview(UIImageView(image: img));
     }
     
-    
-    func insertConnector(connector: UIImageView) {
-        self.connectors.append(connector);
+    private func drawLine(fromNode node: UIView, toLineAt posY: CGFloat, in context: CGContext) {
+        CGContextMoveToPoint(context, node.center.x, node.frame.origin.y);
+        CGContextAddLineToPoint(context, node.center.x, posY);
+        CGContextStrokePath(context);
     }
-    
-    func numberOfLevels() -> UInt {
-        var levels: UInt = 1;
-        if self.children.count == 0 {
-            return levels;
-        }
-        
-        for child in self.children {
-            levels = max(levels, child.numberOfLevels());
-        }
-        
-        return levels+1;
-    }
-    
 }
 
 
